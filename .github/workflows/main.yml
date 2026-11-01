@@ -24,7 +24,12 @@ jobs:
     - name: List repository files
       run: ls ${{ github.workspace }}
     - name: Build website
-      run: ./build.sh
+      run: |
+          ./build.sh
+          find ./website/public -name '*.html' -type f -exec sed -i 's|href="/|href="/redis-docs/|g' '{}' ';'
+          find ./website/public -name '*.html' -type f -exec sed -i 's|src="/|src="/redis-docs/|g' '{}' ';'
+          find ./website/public -type f -exec sed -i "s|url('/|url('/redis-docs/|g" '{}' ';'
+          find ./website/public -name '*.css' -type f -exec sed -i "s|url(/|url(/redis-docs/|g" '{}' ';'
     - name: Upload GitHub Pages artifact
       uses: actions/upload-pages-artifact@v5
       with:
